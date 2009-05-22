@@ -83,7 +83,7 @@ void initScene() {
 	for (i = 0; i < 5; i++)
 			mao->setDistais(new Falange(0.5, 0.09),i);
 	mao->createDLs();
-	mao_dl = createDL();
+	//mao_dl = createDL();
 	glEnable(GL_DEPTH_TEST);
 
 }
@@ -134,7 +134,8 @@ void renderScene(void) {
 
 	glTranslatef(0.0, 0.5, 0.0);
 	glRotated(-90,1.0,0.0,0.0);
-	glCallList(mao_dl);
+	mao->draw();
+	//glCallList(mao_dl);
 	glRotated(90,1.0,0.0,0.0);
 	glTranslatef(0.0, -0.5, 0.0);
 
@@ -149,6 +150,7 @@ void pressKey(int key, int x, int y) {
 		case GLUT_KEY_UP : deltaMove = 1;break;
 		case GLUT_KEY_DOWN : deltaMove = -1;break;
 	}
+
 }
 
 void releaseKey(int key, int x, int y) {
@@ -163,9 +165,91 @@ void releaseKey(int key, int x, int y) {
 
 void processNormalKeys(unsigned char key, int x, int y) {
 	unsigned short i;
-	if (key == 27)
-		exit(0);
+	switch (key){
+		case  27 : exit(0);
+//Polegar
+		case ';': mao->addAnguloMetacarpo (4, 0, 0.5);
+			   break;
+		case '.': mao->addAnguloMetacarpo (4, 0, -0.5);
+			   break;
+		case '0': mao->addAnguloProximais(4, 0, 1.0);
+			   break;
+		case 'l': mao->addAnguloProximais(4, 0, -1.0);
+			   break;
+		case 'p': mao->addAnguloDistais(4, 0, 2.0);
+			   break;
+		case 'o': mao->addAnguloDistais(4, 0, -2.0);
+			   break;
+//Indicador
+		case ',': mao->addAnguloMetacarpo (3, 0, 0.5);
+			   break;
+		case 'm': mao->addAnguloMetacarpo (3, 0, -0.5);
+			   break;
+		case 'k': mao->addAnguloProximais(3, 0, 1.0);
+			   break;
+		case 'j': mao->addAnguloProximais(3, 0, -1.0);
+			   break;
+		case 'i': mao->addAnguloMedias(3, 0, 1.0);
+			   break;
+		case 'u': mao->addAnguloMedias(3, 0, -1.0);
+			   break;
+		case '8': mao->addAnguloDistais(3, 0, 2.0);
+			   break;
+		case '7': mao->addAnguloDistais(3, 0, -2.0);
+			   break;
+//Medio
+		case 'n': mao->addAnguloMetacarpo (2, 0, 0.5);
+			   break;
+		case 'b': mao->addAnguloMetacarpo (2, 0, -0.5);
+			   break;
+		case 'h': mao->addAnguloProximais(2, 0, 1.0);
+			   break;
+		case 'g': mao->addAnguloProximais(2, 0, -1.0);
+			   break;
+		case 'y': mao->addAnguloMedias(2, 0, 1.0);
+			   break;
+		case 't': mao->addAnguloMedias(2, 0, -1.0);
+			   break;
+		case '6': mao->addAnguloDistais(2, 0, 2.0);
+			   break;
+		case '5': mao->addAnguloDistais(2, 0, -2.0);
+			   break;
+//Anelas
+		case 'v': mao->addAnguloMetacarpo (1, 0, 0.5);
+			   break;
+		case 'c' : mao->addAnguloMetacarpo (1, 0, -0.5);
+			   break;
+		case 'f': mao->addAnguloProximais(1, 0, 1.0);
+			   break;
+		case 'd': mao->addAnguloProximais(1, 0, -1.0);
+			   break;
+		case 'r': mao->addAnguloMedias(1, 0, 1.0);
+			   break;
+		case 'e': mao->addAnguloMedias(1, 0, -1.0);
+			   break;
+		case '4': mao->addAnguloDistais(1, 0, 2.0);
+			   break;
+		case '3': mao->addAnguloDistais(1, 0, -2.0);
+			   break;
+//Minimo
+		case 'x': mao->addAnguloMetacarpo (0, 0, 0.5);
+			   break;
+		case 'z' : mao->addAnguloMetacarpo (0, 0, -0.5);
+			   break;
+		case 's': mao->addAnguloProximais(0, 0, 1.0);
+			   break;
+		case 'a': mao->addAnguloProximais(0, 0, -1.0);
+			   break;
+		case 'w': mao->addAnguloMedias(0, 0, 1.0);
+			   break;
+		case 'q': mao->addAnguloMedias(0, 0, -1.0);
+			   break;
+		case '2': mao->addAnguloDistais(0, 0, 2.0);
+			   break;
+		case '1': mao->addAnguloDistais(0, 0, -2.0);
+			   break;
 
+	}
 
 }
 

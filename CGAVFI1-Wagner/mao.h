@@ -14,6 +14,9 @@
 #include "falange.h"
 
 #include <cmath>
+#include <iostream>
+
+using namespace std;
 
 class Mao
 {
@@ -261,5 +264,29 @@ public:
 		glRotatef(-this->anguloDistais[X][i], 0.0, 1.0, 0.0);
 		glTranslatef(-acumuladoX[i],0.0, -acumuladoZ[i]);
 
+	}
+
+	void addAnguloMetacarpo(short dedo, short eixo, float delta){
+		this->anguloMetacarpo[eixo][dedo] += delta;
+		this->anguloProximais[eixo][dedo] += delta;
+		if (dedo < 4)
+			this->anguloMedias[eixo][dedo] += delta;
+		this->anguloDistais[eixo][dedo] += delta;
+	}
+	
+	void addAnguloProximais(short dedo, short eixo, float delta){
+		this->anguloProximais[eixo][dedo] += delta;
+		if (dedo < 4)
+			this->anguloMedias[eixo][dedo] += delta;
+		this->anguloDistais[eixo][dedo] += delta;
+	}
+	void addAnguloMedias(short dedo, short eixo, float delta){
+		if (dedo < 4){
+			this->anguloMedias[eixo][dedo] += delta;
+			this->anguloDistais[eixo][dedo] += delta;
+		}
+	}
+	void addAnguloDistais(short dedo, short eixo, float delta){
+		this->anguloDistais[eixo][dedo] += delta;
 	}
 };
