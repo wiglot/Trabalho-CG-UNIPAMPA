@@ -219,7 +219,7 @@ public:
 		}
 //		//Desenha as Proximais
 //
-		glColor3f(1.0, 0.0, 0.0);
+		//glColor3f(1.0, 0.0, 0.0);
 		for (i = 0; i < 5; i++){
 			//tranlates e Rotates
 
@@ -232,7 +232,7 @@ public:
 			acumuladoX[i] += sin(Mao::drg2rad(this->anguloProximais[X][i]))*this->proximais[i]->getComprimento();;
 		}
 		//Desenha as medias
-		glColor3f(0.0, 1.0, 1.0);
+		//glColor3f(0.0, 1.0, 1.0);
 		for (i = 0; i < 4; i++){
 			//tranlates e Rotates
 			acumuladoZ[i] += cos(Mao::drg2rad(this->anguloProximais[X][i]))*this->proximais[i]->getComprimento();
@@ -246,7 +246,7 @@ public:
 		}
 
 		//Desenha as Distais
-		glColor3f(1.0, 1.0, 0.0);
+		//glColor3f(1.0, 1.0, 0.0);
 		for (i = 0; i < 4; i++){
 			//tranlates e Rotates
 			acumuladoZ[i]+= cos(Mao::drg2rad(this->anguloMedias[X][i]))*this->medias[i]->getComprimento();

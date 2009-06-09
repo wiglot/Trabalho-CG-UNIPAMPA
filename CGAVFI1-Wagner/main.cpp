@@ -8,7 +8,8 @@
 
 #define MAXPARTICULAS 100
 
-float angle=0.0,deltaAngle = 0.0,ratio;
+float angleH=0.0,deltaAngleH = 0.0,ratio;
+float angleV = 0.0, deltaAngleV = 0.0;
 
 float x=0.0f,y=1.75f,z=5.0f;
 
@@ -21,8 +22,7 @@ int width = 640, height = 360;
 Mao *mao = new Mao();
 
 
-
-
+GLfloat luxX = 0.0, luxY = 10.0, luxZ = 10.0;
 
 void changeSize(int w, int h)
 	{
@@ -71,7 +71,16 @@ GLuint createDL() {
 
 
 
-void initScene() {
+void initScene(int argc, char **argv) {
+
+	if (argc == 4){
+	    luxX = atof(argv[1]);
+	    luxY = atof(argv[2]);
+	    luxZ = atof(argv[3]);
+	} else 
+	    if (argc != 1)
+		printf("se deseja posicionar a luz passe as coordenadas X, Y e Z como parametros do programa.\n");
+	//Cria Mão
 	int i, j , k;
 	mao->setCarpo(new Carpo(0.1,1.9, 1.0));
 	for (i = 0; i< 5; i++)
@@ -83,16 +92,28 @@ void initScene() {
 	for (i = 0; i < 5; i++)
 			mao->setDistais(new Falange(0.5, 0.09),i);
 	mao->createDLs();
-	//mao_dl = createDL();
+	
+	GLfloat ambiente[] = {0.24725, 0.1995, 0.0745, 1.0};
+	GLfloat diffuse0[] = {0.75164, 0.60648, 0.22648, 1.0};
+	GLfloat specu0[] = {0.628281, 0.555802, 0.366065, 1.0};
+	GLfloat lightPos[] = {luxX, luxY, luxZ, 1.0 };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambiente);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specu0);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 	glEnable(GL_DEPTH_TEST);
-
+	
 }
 
 
 
-void orientMe(float ang) {
-	lx = sin(ang);
-	lz = -cos(ang);
+void orientMe(float angH, float angV) {
+	lx = sin(angH) ;//+ sin(angV);
+	lz = -cos(angH);// + sin(angV);
+	ly = cos(angV);
+	
 	glLoadIdentity();
 	gluLookAt(x, y, z,
 		      x + lx,y + ly,z + lz,
@@ -104,6 +125,7 @@ void moveMeFlat(int i) {
 
 	x = x+ i*(lx)*0.1;
 	z = z+ i*(lz)*0.1;
+	y = y+ i*(ly)*0.1;
 
 	glLoadIdentity();
 	gluLookAt(x, y, z,
@@ -116,9 +138,17 @@ void renderScene(void) {
 	unsigned short i;
 	if (deltaMove)
 		moveMeFlat(deltaMove);
-	if (deltaAngle) {
-		angle += deltaAngle;
-		orientMe(angle);
+	if (deltaAngleH || deltaAngleV){
+		angleH += deltaAngleH;
+		if(angleV <= M_PI && angleV >= -M_PI)
+		    angleV += deltaAngleV;
+		else
+		  if (angleV > M_PI)
+		      angleV = M_PI - 0.01;
+		  else
+		      angleV = -M_PI+ 0.01;
+		
+		orientMe(angleH, angleV);
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -145,8 +175,8 @@ void renderScene(void) {
 void pressKey(int key, int x, int y) {
 
 	switch (key) {
-		case GLUT_KEY_LEFT : deltaAngle = -0.01f;break;
-		case GLUT_KEY_RIGHT : deltaAngle = 0.01f;break;
+		case GLUT_KEY_LEFT : deltaAngleH = -0.01f;break;
+		case GLUT_KEY_RIGHT : deltaAngleH = 0.01f;break;
 		case GLUT_KEY_UP : deltaMove = 1;break;
 		case GLUT_KEY_DOWN : deltaMove = -1;break;
 	}
@@ -157,7 +187,7 @@ void releaseKey(int key, int x, int y) {
 
 	switch (key) {
 		case GLUT_KEY_LEFT :
-		case GLUT_KEY_RIGHT : deltaAngle = 0.0f;break;
+		case GLUT_KEY_RIGHT : deltaAngleH = 0.0f;break;
 		case GLUT_KEY_UP :
 		case GLUT_KEY_DOWN : deltaMove = 0;break;
 	}
@@ -280,14 +310,19 @@ void processMousePassiveMotion(int x, int y) {
 	// setting the angle to be relative to the mouse
 	// position inside the window
 	if (x < 0 || x > width || y < 0 || y > height)
-		deltaAngle = 0.0;
+		deltaAngleH = 0.0;
 	else{
 		x -= width/2;
 		if (x < 0)
-			deltaAngle = -x/((double)width*2) * x/((double)width*2);
+			deltaAngleH = -x/((double)width*4) * x/((double)width*4);
 		else
-			deltaAngle = x/((double)width*2) * x/((double)width*2);
+			deltaAngleH = x/((double)width*4) * x/((double)width*4);
 
+		y -= height/2;
+		if (y < 0)
+			deltaAngleV = -y/((double)height*4) * y/((double)height*4);
+		else
+			deltaAngleV = y/((double)height*4) * y/((double)height*4);
 	}
 
 }
@@ -300,7 +335,7 @@ int main(int argc, char **argv)
 	glutInitWindowSize(640,360);
 	glutCreateWindow("SnowMen from Lighthouse 3D");
 
-	initScene();
+	initScene(argc, argv);
 
 	glutIgnoreKeyRepeat(1);
 	glutKeyboardFunc(processNormalKeys);
