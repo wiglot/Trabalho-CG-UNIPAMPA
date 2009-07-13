@@ -333,7 +333,7 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100,100);
 	glutInitWindowSize(640,360);
-	glutCreateWindow("SnowMen from Lighthouse 3D");
+	glutCreateWindow("Hand von Wiglot - Unipampa - CG 09/1");
 
 	initScene(argc, argv);
 
